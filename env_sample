@@ -1,0 +1,19 @@
+PORT = "3100"
+LOGGER_LEVEL= "info"
+# Ethereum 主网节点地址
+MAINNET_PROVIDER_URL = ""
+
+# PostgreSQL
+PGUSER = "chaintool"
+PGHOST = "127.0.0.1"
+PGDATABASE = "chaintool"
+PGPASSWORD = "123456"
+PGPORT = "5432"
+
+SSL_ON = "false"
+# 监听端口
+SSL_PORT = 3101
+# 证书私钥文件，放在server/cert目录下,文件名、后缀可随意
+SSL_KEY = "server.key"
+# 证书文件，放在server/ccert目录下,文件名、后缀可随意
+SSL_CERT = "server.cert"
