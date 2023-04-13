@@ -10,12 +10,14 @@ async function get(ctx) {
     if (!id) return _succeed(ctx, null);
 
     let where = { id };
+    // TODO: convert hashid
+   
 
     let abiModel = await dbUtil.getOne('abi', where);
     const respData = {
         "id": abiModel.id,
         "name": abiModel.name,
-        "network": abiModel.chain_id,
+        "network": abiModel.chain_id,  // TODO: convert chain_id to network
         "address": abiModel.address,
         "abi": abiModel.abi,
     }
@@ -29,8 +31,9 @@ async function submit(ctx) {
     let { name, network, address, abi } = ctx.request.body;
     if (!network || !address || !abi) return _fail(ctx, 'Invalid params');
 
-    // 检查参数
-    // 检查重复
+    // TODO: check parameters
+    // TODO: check duplicate
+    // TODO: convert network to chain_id
 
     const model = {
         "name": name,
