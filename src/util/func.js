@@ -1,4 +1,6 @@
 const ethers = require('ethers');
+const consts = require('../consts');
+
 
 function isValidAddress(address) {
     // eg: 0x221507c5cae31196a535f223c022eb0e38c3377d
@@ -19,7 +21,13 @@ function isValidAbi(jsonStr) {
     return Array.isArray(abi);
 }
 
+function isValidChainId(chainId){
+    return consts.CHAIN_IDS.includes(String(chainId));
+}
+
+
 module.exports = {
     isValidAddress,
     isValidAbi,
+    isValidChainId,
 }

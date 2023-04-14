@@ -22,9 +22,25 @@ const ABI_FRAGMENT_TYPE = {
     'error': 3,
 }
 
+const CHAIN_ID_TO_NETWORK = {
+    1: 'Ethereum Mainnet',
+    5: 'Goerli',
+    11155111: 'Sepolia',
+    137: 'Polygon Mainnet',
+    80001: 'Mumbai',
+    56: 'BNB Chain',
+    97: 'BNB Testnet Chain',
+    31337: 'Hardhat(localhost)',
+}
+
+const CHAIN_IDS = Object.keys(CHAIN_ID_TO_NETWORK);
+
+
 module.exports = {
     NETWORKS,
     PROVIDERS,
     ETHERSCAN_URI,
     ABI_FRAGMENT_TYPE,
+    CHAIN_IDS,
+    CHAIN_ID_TO_NETWORK,
 };

@@ -1,7 +1,7 @@
 const logger = require('../util/logger');
 const dbUtil = require('../util/dbUtil');
 const hashid = require('../util/hashid');
-const {isValidAddress, isValidAbi} = require('../util/func');
+const {isValidAddress, isValidAbi, isValidChainId} = require('../util/func');
 const { fail: _fail, succeed: _succeed } = require('./common');
 
 
@@ -18,7 +18,7 @@ async function get(ctx) {
     const respData = {
         "id": hashid.encode(abiModel.id),
         "name": abiModel.name,
-        "network": abiModel.chain_id,  // TODO: convert chain_id to network
+        "chainId": Number(abiModel.chain_id),
         "address": abiModel.address,
         "abi": abiModel.abi,
     }
@@ -29,17 +29,18 @@ async function get(ctx) {
 async function submit(ctx) {
     logger.debug('submitAbi', ctx.request.body);
 
-    let { name, network, address, abi } = ctx.request.body;
-    if (!network || !address || !abi) return _fail(ctx, 'Invalid params');
+    let { name, chainId, address, abi } = ctx.request.body;
+    if (!chainId || !address || !abi) return _fail(ctx, 'Invalid params');
     if(!isValidAddress(address)) return _fail(ctx, 'Invalid address');
     if(!isValidAbi(abi)) return _fail(ctx, 'Invalid abi');
+    if(!isValidChainId(chainId)) return _fail(ctx, 'Invalid chainId');
+
 
     // TODO: check duplicate
-    // TODO: convert network to chain_id
 
     const model = {
         "name": name,
-        "chain_id": network,
+        "chain_id": Number(chainId),
         "address": address,
         "abi": abi,
     }
