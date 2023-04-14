@@ -14,6 +14,7 @@ async function get(ctx) {
 
     let where = { id };
     let abiModel = await dbUtil.getOne('abi', where);
+    if(!abiModel) return _succeed(ctx, null);
 
     const respData = {
         "id": hashid.encode(abiModel.id),
