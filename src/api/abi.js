@@ -1,7 +1,7 @@
 const logger = require('../util/logger');
 const dbUtil = require('../util/dbUtil');
 const hashid = require('../util/hashid');
-const {isValidAddress, isValidAbi, isValidChainId} = require('../util/func');
+const { isValidAddress, isValidAbi, isValidChainId, getChecksumAddress } = require('../util/func');
 const { fail: _fail, succeed: _succeed } = require('./common');
 
 
@@ -14,7 +14,7 @@ async function get(ctx) {
 
     let where = { id };
     let abiModel = await dbUtil.getOne('abi', where);
-    
+
     const respData = {
         "id": hashid.encode(abiModel.id),
         "name": abiModel.name,
@@ -31,24 +31,38 @@ async function submit(ctx) {
 
     let { name, chainId, address, abi } = ctx.request.body;
     if (!chainId || !address || !abi) return _fail(ctx, 'Invalid params');
-    if(!isValidAddress(address)) return _fail(ctx, 'Invalid address');
-    if(!isValidAbi(abi)) return _fail(ctx, 'Invalid abi');
-    if(!isValidChainId(chainId)) return _fail(ctx, 'Invalid chainId');
+    if (!isValidAddress(address)) return _fail(ctx, 'Invalid address');
+    if (!isValidAbi(abi)) return _fail(ctx, 'Invalid abi');
+    if (!isValidChainId(chainId)) return _fail(ctx, 'Invalid chainId');
 
+    address = getChecksumAddress(address);
+    chainId = Number(chainId);
+    // TODO: format abi
 
-    // TODO: check duplicate
-
-    const model = {
+    const where = {
         "name": name,
-        "chain_id": Number(chainId),
+        "chain_id": chainId,
         "address": address,
         "abi": abi,
     }
+    const record = await dbUtil.getOne('abi', where)
 
-    let id = await dbUtil.insert('abi', model);
-    id = hashid.encode(id);
+    const respData = { id: null };
+    if (record) {
+        respData.id = hashid.encode(record.id);
+    } else {
+        const model = {
+            "name": name,
+            "chain_id": chainId,
+            "address": address,
+            "abi": abi,
+        }
 
-    return _succeed(ctx, { id });
+        const id = await dbUtil.insert('abi', model);
+        respData.id = hashid.encode(id);
+    }
+
+    return _succeed(ctx, respData);
 }
 
 

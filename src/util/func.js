@@ -25,9 +25,15 @@ function isValidChainId(chainId){
     return consts.CHAIN_IDS.includes(String(chainId));
 }
 
+function getChecksumAddress(address){
+    if(!isValidAddress(address)) return null;
+    return ethers.utils.getAddress(address);
+}
+
 
 module.exports = {
     isValidAddress,
     isValidAbi,
     isValidChainId,
+    getChecksumAddress,
 }
