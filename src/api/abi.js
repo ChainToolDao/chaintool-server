@@ -1,5 +1,6 @@
 const logger = require('../util/logger');
 const dbUtil = require('../util/dbUtil');
+const hashid = require('../util/hashid');
 const { fail: _fail, succeed: _succeed } = require('./common');
 
 
@@ -7,15 +8,14 @@ async function get(ctx) {
     logger.debug('getAbi', ctx.request.params);
 
     let { id } = ctx.request.query;
+    id = hashid.decode(id);
     if (!id) return _succeed(ctx, null);
 
     let where = { id };
-    // TODO: convert hashid
-   
-
     let abiModel = await dbUtil.getOne('abi', where);
+    
     const respData = {
-        "id": abiModel.id,
+        "id": hashid.encode(abiModel.id),
         "name": abiModel.name,
         "network": abiModel.chain_id,  // TODO: convert chain_id to network
         "address": abiModel.address,
@@ -43,6 +43,7 @@ async function submit(ctx) {
     }
 
     let id = await dbUtil.insert('abi', model);
+    id = hashid.encode(id);
 
     return _succeed(ctx, { id });
 }
