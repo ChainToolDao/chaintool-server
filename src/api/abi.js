@@ -1,6 +1,7 @@
 const logger = require('../util/logger');
 const dbUtil = require('../util/dbUtil');
 const hashid = require('../util/hashid');
+const {isValidAddress, isValidAbi} = require('../util/func');
 const { fail: _fail, succeed: _succeed } = require('./common');
 
 
@@ -30,8 +31,9 @@ async function submit(ctx) {
 
     let { name, network, address, abi } = ctx.request.body;
     if (!network || !address || !abi) return _fail(ctx, 'Invalid params');
+    if(!isValidAddress(address)) return _fail(ctx, 'Invalid address');
+    if(!isValidAbi(abi)) return _fail(ctx, 'Invalid abi');
 
-    // TODO: check parameters
     // TODO: check duplicate
     // TODO: convert network to chain_id
 
