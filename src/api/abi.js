@@ -1,7 +1,7 @@
 const logger = require('../util/logger');
 const dbUtil = require('../util/dbUtil');
 const hashid = require('../util/hashid');
-const { isValidAddress, isValidAbi, isValidChainId, getChecksumAddress } = require('../util/func');
+const { isValidAddress, isValidAbi, isValidChainId, getChecksumAddress, formatAbi } = require('../util/func');
 const { fail: _fail, succeed: _succeed } = require('./common');
 
 
@@ -37,7 +37,7 @@ async function submit(ctx) {
 
     address = getChecksumAddress(address);
     chainId = Number(chainId);
-    // TODO: format abi
+    abi = formatAbi(abi);
 
     const where = {
         "name": name,
