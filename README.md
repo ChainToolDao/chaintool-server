@@ -36,7 +36,7 @@ yarn install
 3. 初始化数据库:
     在项目根目录下执行
     ```
-    > psql -p 5432 -h 127.0.0.1 -U <DatabaseUser> -d <DatabaseName> -f ./chaintool.sql; 
+    > psql -p 5432 -h 127.0.0.1 -U <DatabaseUser> -d <DatabaseName> -f ./sql/chaintool.sql; 
     ```
 4. 登录数据库：
     ```
