@@ -1,6 +1,6 @@
 {
     "apps": [{
         "name": "chaintool",
-        "script": "./main.js"
+        "script": "./src/main.js"
     }]
 }

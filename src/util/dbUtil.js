@@ -12,6 +12,10 @@ async function get(table, where, options = {}) {
     return records;
 }
 
+async function getOne(table, where, options = {}) {
+    return (await get(table, where, options = {}))[0];
+}
+
 async function query(sql) {
     let result;
     try {
@@ -33,13 +37,13 @@ async function update(table, where, data) {
 }
 
 async function insert(table, data) {
-    let num = 0;
+    let id = null;
     try {
-        num = await db.insert(table, data);
+        id = await db.insert(table, data);
     } catch (err) {
         logger.error('dbUtil insert failed', { table, data }, err);
     }
-    return num;
+    return id;
 }
 
 async function batchInsert(table, datas) {
@@ -77,6 +81,7 @@ async function delAll(table) {
 
 module.exports = {
     get,
+    getOne,
     query,
     update,
     insert,
