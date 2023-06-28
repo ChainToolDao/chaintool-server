@@ -153,7 +153,7 @@ async function _crawl(uri, cache = true) {
 
 async function _fetchAddrLabelFromEtherscan(address, isContract, chainId) {
     let result = null;
-    let uri = consts.ETHERSCAN_URI[chainId] + `/address/${address}`
+    let uri = consts.ETHERSCAN_URI[chainId] + `/address/${address}`;
 
     try {
         let content = await _crawl(uri);
@@ -167,6 +167,9 @@ async function _fetchAddrLabelFromEtherscan(address, isContract, chainId) {
             if (elements.length > 0) {
                 target = $(elements[0]);
                 result = target.text().trim();
+                if(result.startsWith(`<img src='`)){
+                    result = (result.split(`>`))[1]
+                }
             } else {
                 let elements = $('#ContentPlaceHolder1_contractCodeDiv').find('div');
                 if (elements) {
